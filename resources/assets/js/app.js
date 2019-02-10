@@ -17,6 +17,8 @@
 
 // Vue.component('example-component', require('./components/ExampleComponent.vue'));
 
+import './bootstrap'
+
 import Vue from 'vue'
 //ルーティングの定義をインポートする
 import router from './router'
