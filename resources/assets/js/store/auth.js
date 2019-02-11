@@ -1,5 +1,8 @@
+import { OK } from '../util'
+
 const state = {
-    user: null
+    user: null,
+    apiStatus: null
 }
 
 const getters = {
@@ -19,8 +22,16 @@ const actions = {
         context.commit('setUser', response.data)
       },
     async login (context, data) {
-        const response = await axios.post('/api/login', data)
-        context.commit('setUser', response.data)
+        context.commit('setApiStatus', null)//通信ステータスの更新　最初はnull
+        const response = await axios.post('/api/login', data).catch(err => err.response || err)
+
+        if(response.status === OK){
+            context.commit('setApiStatus', true)//通信ステータスの更新　成功したらtrue
+            context.commit('setUser', response.data)
+            return false
+        }
+        context.commit('setApiStatus', false)//通信ステータスの更新　失敗したらfalse
+        context.commit('error/setCode', response.status, { root: true })//別モジュールのミューテーションを呼び出す
       },
     async logout (context) {
         const response = await axios.post('/api/logout')
