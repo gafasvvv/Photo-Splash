@@ -3,7 +3,8 @@ const state = {
 }
 
 const getters = {
-
+    check: state => !! state.user,
+    username: state => state.user ? state.user.name : ''
 }
 
 const mutations = {
@@ -24,6 +25,11 @@ const actions = {
     async logout (context) {
         const response = await axios.post('/api/logout')
         context.commit('setUser', null)
+      },
+    async currentUser(context){
+        const response = await axios.get('/api/user')
+        const user = response.data || null
+        context.commit('setUser', user)
       }
 }
 

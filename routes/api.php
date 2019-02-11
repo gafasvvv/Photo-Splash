@@ -13,9 +13,9 @@ use Illuminate\Http\Request;
 |
 */
 
-Route::middleware('auth:api')->get('/user', function (Request $request) {
-    return $request->user();
-});
+// Route::middleware('auth:api')->get('/user', function (Request $request) {
+//     return $request->user();
+// });
 
 
 // 会員登録
@@ -26,3 +26,8 @@ Route::post('/login', 'Auth\LoginController@login')->name('login');
 
 // ログアウト
 Route::post('/logout', 'Auth\LoginController@logout')->name('logout');
+
+//ログインユーザーの状態を保持
+Route::get('/user', function(){
+    return Auth::user();
+})->name('user');

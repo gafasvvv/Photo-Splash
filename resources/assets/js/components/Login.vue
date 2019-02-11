@@ -61,7 +61,7 @@
     methods: {
         async login () {
             // authストアのresigterアクションを呼び出す
-            await this.$store.dispatch('auth/login', this.registerForm)
+            await this.$store.dispatch('auth/login', this.loginForm)
 
             // トップページに移動する
             this.$router.push('/')
