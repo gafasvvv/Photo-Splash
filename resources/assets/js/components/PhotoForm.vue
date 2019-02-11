@@ -11,6 +11,10 @@
             <output class="form__output" v-if="preview">
                 <img :src="preview" alt="">
             </output>
+            <div v-show="loading" class="panel">
+                <Loader>Sending your photo....</Loader>
+            </div>
+            <form v-show="! loading" class="form" @submit.prevent="submit"></form>
             <div class="form__button">
                 <button type="submit" class="button button--inverse">submit</button>
             </div>
@@ -20,7 +24,12 @@
 
 <script>
 import { CREATED, UNPROCESSABLE_ENTITY } from '../util'
+import Loader from './Loader.vue'
+
 export default {
+    components: {
+        Loader
+    },
     props: {
         value: {
             type: Boolean,
@@ -29,6 +38,7 @@ export default {
     },
     data() {
         return {
+            loading: false,
             preview: null,
             photo: null,
             errors: null
@@ -73,9 +83,13 @@ export default {
             this.$el.querySelector('input[type="file"]').value = null
         },
         async submit(){
+            this.loading = true
+
             const formData = new FormData()
             formData.append('photo', this.photo)
             const response = await axios.post('/api/photos', formData)
+
+            this.loading = false
 
             if(response.status === UNPROCESSABLE_ENTITY){//バリデーションエラー
                 this.errors = response.data.errors
@@ -89,6 +103,12 @@ export default {
                 this.$store.commit('error/setCode', response.status)
                 return false
             }
+
+            //メッセージ登録
+            this.$store.commit('message/setContent', {
+                content: '写真が投稿されました！',
+                timeout: 6000
+            })
 
             this.$router.push(`/photos/${response.data.id}`)
         }
