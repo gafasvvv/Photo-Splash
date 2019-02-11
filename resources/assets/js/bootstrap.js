@@ -33,6 +33,12 @@ window.axios.interceptors.request.use(config => {
   return config
 })
 
+//レスポンスを受けた後の処理を上書き
+window.axios.interceptors.response.use(
+  response => response,
+  error => error.response || error
+)
+
 /**
  * Next we will register the CSRF Token as a common header with Axios so that
  * all outgoing HTTP requests automatically have it attached. This is just

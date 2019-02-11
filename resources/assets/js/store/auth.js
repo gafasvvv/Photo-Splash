@@ -1,8 +1,10 @@
-import { OK } from '../util'
+import { OK, CREATED, UNPROCESSABLE_ENTITY } from '../util'
 
 const state = {
     user: null,
-    apiStatus: null
+    apiStatus: null,
+    loginErrorMessages: null,
+    registerErrorMessages: null
 }
 
 const getters = {
@@ -13,17 +15,42 @@ const getters = {
 const mutations = {
     setUser (state, user) {
         state.user = user
-      }
+    },
+    setApiStatus (state, status) {
+        state.apiStatus = status
+    },
+    setLoginErrorMessages (state, messages) {
+        state.loginErrorMessages = messages
+    },
+    setRegisterErrorMessages (state, messages) {
+        state.registerErrorMessages = messages
+    }
 }
 
 const actions = {
+    //会員登録
     async register (context, data) {
+        context.commit('setApiStatus', null)
         const response = await axios.post('/api/register', data)
-        context.commit('setUser', response.data)
+
+        if(response.status === CREATED){
+            context.commit('setApiStatus', true)
+            context.commit('setUser', response.data)
+            return false
+        }
+
+        context.commit('setApiStatus', false)
+        if(response.status === UNPROCESSABLE_ENTITY){
+            context.commit('setRegisterErrorMessages', response.data.errors)
+        } else {
+            context.commit('error/setCode', response.status, { root: true })
+        }
       },
+
+    //ログイン
     async login (context, data) {
         context.commit('setApiStatus', null)//通信ステータスの更新　最初はnull
-        const response = await axios.post('/api/login', data).catch(err => err.response || err)
+        const response = await axios.post('/api/login', data)
 
         if(response.status === OK){
             context.commit('setApiStatus', true)//通信ステータスの更新　成功したらtrue
@@ -31,16 +58,41 @@ const actions = {
             return false
         }
         context.commit('setApiStatus', false)//通信ステータスの更新　失敗したらfalse
-        context.commit('error/setCode', response.status, { root: true })//別モジュールのミューテーションを呼び出す
+        if(response.status === UNPROCESSABLE_ENTITY){
+            context.commit('setLoginErrorMessages', response.data.errors)
+        } else {
+            context.commit('error/setCode', response.status, { root: true })//別モジュールのミューテーションを呼び出す
+        }
       },
+
+    //ログアウト
     async logout (context) {
+        context.commit('setApiStatus', null)
         const response = await axios.post('/api/logout')
-        context.commit('setUser', null)
+
+        if(response.status === OK){
+            context.commit('setApiStatus', true)
+            context.commit('setUser', null)
+            return false
+        }
+
+        context.commit('setApiStatus', false)
+        context.commit('error/setCode', response.status, { roor: true })
       },
+
+    //ログインユーザーチェック
     async currentUser(context){
+        context.commit('setApiStatus', null)
         const response = await axios.get('/api/user')
         const user = response.data || null
-        context.commit('setUser', user)
+
+        if(response.status === OK){
+            context.commit('setApiStatus', true)
+            context.commit('setUser', user)
+            return false
+        }
+        context.commit('setApiStatus', false)
+        context.commit('error/setCode', response.status, { root: true })
       }
 }
 
