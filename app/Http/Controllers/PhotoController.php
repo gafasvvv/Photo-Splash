@@ -21,35 +21,20 @@ class PhotoController extends Controller
     //写真投稿
     public function create(StorePhoto $request)
     {
-        //投稿写真の拡張子を取得する
-        $extension = $request->photo->extension();
-
+       
         $photo = new Photo();
+        //第一引数はファイルの保存先のパス。「photo/」配下に保存される
+        //第二引数は画像ファイル
+        //第三引数は外部からのアクセスの可否。publicにすると許可される
+        $path = Storage::disk('s3')->putFile('photo', $request->photo, 'public');
 
-        //インスタンス生成時に割り振られたランダムなID値と
-        //本来の拡張子を組み合わせてファイル名とする
-        $photo->filename = $photo->id . '.' . $extension;
-
-        //S3にファイルを保存する
-        // 第３引数のpublicはファイルを公開状態で保存するため
-        Storage::cloud()->putFileAs('', $request->photo, $photo->filename, 'public');
-
-        //データーベースエラー時にファイル削除を行うため
-        //トランザクションを利用する
-        DB::beginTransaction();
-
-        try {
-            Auth::user()->photos()->save($photo);
-            DB::commit();
-        } catch (\Exception $exception){
-            DB::rollBack();
-            //DBとの不整合を避けるためアップロードしたファイルを削除
-            Storage::cloud()->delete($photo->filename);
-            throw $exception;
-        }
-
-        //リソースの新規作成なので
-        //レスポンスコードは201(CREATED)を返す
+        //アップロード先のファイルパスを取得
+        $url = Storage::disk('s3')->url($path);
+        $photo->filename = $url;
+        Auth::user()->photos()->save($photo);
+        
+        // リソースの新規作成なので
+        // レスポンスコードは201(CREATED)を返却する
         return response($photo, 201);
     }
 }

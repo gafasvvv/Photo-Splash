@@ -3053,7 +3053,6 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
 //
 //
 //
-//
 
 
 /* harmony default export */ __webpack_exports__["default"] = ({
@@ -4924,8 +4923,33 @@ var render = function() {
       _c("h2", { staticClass: "title" }, [_vm._v("Submit a photo")]),
       _vm._v(" "),
       _c(
+        "div",
+        {
+          directives: [
+            {
+              name: "show",
+              rawName: "v-show",
+              value: _vm.loading,
+              expression: "loading"
+            }
+          ],
+          staticClass: "panel"
+        },
+        [_c("Loader", [_vm._v("Sending your photo....")])],
+        1
+      ),
+      _vm._v(" "),
+      _c(
         "form",
         {
+          directives: [
+            {
+              name: "show",
+              rawName: "v-show",
+              value: !_vm.loading,
+              expression: "! loading"
+            }
+          ],
           staticClass: "form",
           on: {
             submit: function($event) {
@@ -4960,41 +4984,6 @@ var render = function() {
                 _c("img", { attrs: { src: _vm.preview, alt: "" } })
               ])
             : _vm._e(),
-          _vm._v(" "),
-          _c(
-            "div",
-            {
-              directives: [
-                {
-                  name: "show",
-                  rawName: "v-show",
-                  value: _vm.loading,
-                  expression: "loading"
-                }
-              ],
-              staticClass: "panel"
-            },
-            [_c("Loader", [_vm._v("Sending your photo....")])],
-            1
-          ),
-          _vm._v(" "),
-          _c("form", {
-            directives: [
-              {
-                name: "show",
-                rawName: "v-show",
-                value: !_vm.loading,
-                expression: "! loading"
-              }
-            ],
-            staticClass: "form",
-            on: {
-              submit: function($event) {
-                $event.preventDefault()
-                return _vm.submit($event)
-              }
-            }
-          }),
           _vm._v(" "),
           _vm._m(0)
         ]
