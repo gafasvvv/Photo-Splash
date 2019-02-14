@@ -18,17 +18,12 @@ class User extends Authenticatable
         'name', 'email', 'password',
     ];
 
-    /**
-     * The attributes that should be hidden for arrays.
-     *
-     * @var array
-     */
-    protected $hidden = [
-        'password', 'remember_token',
-    ];
-
     public function photos()
     {
         return $this->hasMany(Photo::class);
     }
+
+    protected $visiable = [
+        'name',
+    ];
 }
