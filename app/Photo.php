@@ -26,9 +26,18 @@ class Photo extends Model
         return Storage::cloud()->url();
     }
 
+    /**
+     * リレーションシップ - commentsテーブル
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
+    public function comments()
+    {
+        return $this->hasMany('App\Comment')->orderBy('id', 'desc');
+    }
+
     /**JSONに含める属性 */
     protected $visiable = [
-        'id', 'user', 'url'
+        'id', 'user', 'url', 'comments'
     ];
 
 }
