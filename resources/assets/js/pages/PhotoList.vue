@@ -24,6 +24,13 @@ export default {
         Photo,
         Pagination
     },
+    props: {
+        page: {
+            type: Number,
+            required: false,
+            default: 1
+        }
+    },
     data() {
         return{
             photos: [],
@@ -53,7 +60,7 @@ export default {
             if(liked){
                 this.unlike(id)
             } else {
-                this.liked(id)
+                this.like(id)
             }
         },
         async like (id) {
