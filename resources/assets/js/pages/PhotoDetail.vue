@@ -92,19 +92,27 @@ export default {
       this.photo = response.data
     },
     async addComment () {
+
       const response = await axios.post(`/api/photos/${this.id}/comments`, {
         content: this.commentContent
       })
+
+      //バリデーションエラー
       if (response.status === UNPROCESSABLE_ENTITY) {
         this.commentErrors = response.data.errors
         return false
       }
+
       this.commentContent = ''
+      //エラーメッセージをクリア
       this.commentErrors = null
+
+      //その他のエラー
       if (response.status !== CREATED) {
         this.$store.commit('error/setCode', response.status)
         return false
       }
+
       this.$set(this.photo, 'comments', [
         response.data,
         ...this.photo.comments
@@ -115,6 +123,7 @@ export default {
         alert('いいね機能を使うにはログインしてください。')
         return false
       }
+
       if (this.photo.liked_by_user) {
         this.unlike()
       } else {
@@ -123,19 +132,23 @@ export default {
     },
     async like () {
       const response = await axios.put(`/api/photos/${this.id}/like`)
+
       if (response.status !== OK) {
         this.$store.commit('error/setCode', response.status)
         return false
       }
+
       this.$set(this.photo, 'likes_count', this.photo.likes_count + 1)
       this.$set(this.photo, 'liked_by_user', true)
     },
     async unlike () {
       const response = await axios.delete(`/api/photos/${this.id}/like`)
+
       if (response.status !== OK) {
         this.$store.commit('error/setCode', response.status)
         return false
       }
+      
       this.$set(this.photo, 'likes_count', this.photo.likes_count - 1)
       this.$set(this.photo, 'liked_by_user', false)
     }

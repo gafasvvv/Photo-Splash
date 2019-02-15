@@ -45,7 +45,7 @@ class PhotoController extends Controller
     //写真一覧
     public function index()
     {
-        $photos = Photo::with(['user'])
+        $photos = Photo::with(['user', 'likes'])
             ->orderBy(Photo::CREATED_AT, 'desc')->paginate();
 
         return $photos;
@@ -59,7 +59,7 @@ class PhotoController extends Controller
     public function show(string $id)
     {
         $photo = Photo::where('id', $id)
-            ->with(['user', 'comments.author'])->first();
+            ->with(['user', 'comments.author', 'likes'])->first();
 
         return $photo ?? abort(404);
     }
@@ -103,6 +103,40 @@ class PhotoController extends Controller
         return response(Storage::cloud()->get($photo->filename), 200, $headers);
     }
 
+    /**
+     * いいね追加
+     */
+    public function like(string $id)
+    {
+        $photo = Photo::where('id', $id)->with('likes')->first();
+
+        if(! $photo){
+            abort(404);
+        }
+
+        $photo->likes()->detach(Auth::user()->id);
+        $photo->likes()->attach(Auth::user()->id);
+
+        return ["photo_id" => $id];
+
+    }
+
+    /**
+     * いいね解除
+     */
+    public function unlike(string $id)
+    {
+        $photo = Photo::where('id', $id)->with('likes')->first();
+
+        if(! $photo){
+            abort(404);
+        }
+
+        $photo->likes()->detach(Auth::user()->id);
+
+        return ["photo_id" => $id];
+
+    }
 }
 
 
