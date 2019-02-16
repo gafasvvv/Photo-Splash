@@ -100,6 +100,7 @@
         async register () {
             // authストアのresigterアクションを呼び出す
             await this.$store.dispatch('auth/register', this.registerForm)
+            
             if(this.apiStatus){
                 // トップページに移動する
                 this.$router.push('/')
