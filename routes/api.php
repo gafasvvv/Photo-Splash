@@ -1,6 +1,6 @@
 <?php
 
-use Illuminate\Http\Request;
+// use Illuminate\Http\Request;
 
 /*
 |--------------------------------------------------------------------------
@@ -32,6 +32,13 @@ Route::get('/user', function(){
     return Auth::user();
 })->name('user');
 
+// トークンリフレッシュ
+Route::get('/reflesh-token', function(Illuminate\Http\Request $request){
+    $request->session()->regenerateToken();
+
+    return response()->json();
+});
+
 //写真投稿
 Route::post('/photos', 'PhotoController@create')->name('photo.create');
 
@@ -49,10 +56,3 @@ Route::put('/photos/{id}/like', 'PhotoController@like')->name('photo.like');
 
 //いいね解除
 Route::delete('/photos/{id}/like', 'PhotoController@unlike')->name('photo.unlike');
-
-// トークンリフレッシュ
-Route::get('/reflesh-token', function(Illuminate\Http\Request $request){
-    $request->session()->regenerateToken();
-
-    return response()->json();
-});

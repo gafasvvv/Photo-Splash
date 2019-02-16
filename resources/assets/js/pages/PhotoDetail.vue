@@ -32,8 +32,8 @@
       </h2>
       <ul v-if="photo.comments.length > 0" class="photo-detail__comments">
         <li
-          v-for="comment in photo.comments"
-          :key="comment.content"
+          v-for="(comment, i) in photo.comments"
+          :key="`${i}-${comment.content}`"
           class="photo-detail__commentItem"
         >
           <p class="photo-detail__commentBody">
@@ -148,7 +148,7 @@ export default {
         this.$store.commit('error/setCode', response.status)
         return false
       }
-      
+
       this.$set(this.photo, 'likes_count', this.photo.likes_count - 1)
       this.$set(this.photo, 'liked_by_user', false)
     }

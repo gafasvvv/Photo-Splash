@@ -18,12 +18,19 @@ class User extends Authenticatable
         'name', 'email', 'password',
     ];
 
+    /** JSONに含める属性 */
+    protected $visible = [
+        'name',
+    ];
+
+    /**
+     * リレーションシップ - photosテーブル
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
+
     public function photos()
     {
         return $this->hasMany(Photo::class);
     }
 
-    protected $visiable = [
-        'name',
-    ];
 }

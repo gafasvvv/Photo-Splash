@@ -27,7 +27,7 @@ class Photo extends Model
      */
     public function user()
     {
-        return $this->belongsTo(User::class, 'user_id', 'id', 'users');
+        return $this->belongsTo('App\User', 'user_id', 'id', 'users');
     }
 
 
@@ -38,6 +38,15 @@ class Photo extends Model
     public function likes()
     {
         return $this->belongsToMany('App\User', 'likes')->withTimestamps();
+    }
+
+    /**
+     * リレーションシップ - commentsテーブル
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
+    public function comments()
+    {
+        return $this->hasMany('App\Comment')->orderBy('id', 'desc');
     }
 
     /**
@@ -71,16 +80,6 @@ class Photo extends Model
         return $this->likes->contains(function($user) {
             return $user->id === Auth::user()->id;
         });
-    }
-    
-
-    /**
-     * リレーションシップ - commentsテーブル
-     * @return \Illuminate\Database\Eloquent\Relations\HasMany
-     */
-    public function comments()
-    {
-        return $this->hasMany('App\Comment')->orderBy('id', 'desc');
     }
 
 }

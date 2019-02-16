@@ -2350,6 +2350,10 @@ function asyncGeneratorStep(gen, resolve, reject, _next, _throw, key, arg) { try
 
 function _asyncToGenerator(fn) { return function () { var self = this, args = arguments; return new Promise(function (resolve, reject) { var gen = fn.apply(self, args); function _next(value) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "next", value); } function _throw(err) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "throw", err); } _next(undefined); }); }; }
 
+function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i] != null ? arguments[i] : {}; var ownKeys = Object.keys(source); if (typeof Object.getOwnPropertySymbols === 'function') { ownKeys = ownKeys.concat(Object.getOwnPropertySymbols(source).filter(function (sym) { return Object.getOwnPropertyDescriptor(source, sym).enumerable; })); } ownKeys.forEach(function (key) { _defineProperty(target, key, source[key]); }); } return target; }
+
+function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
+
 //
 //
 //
@@ -2430,7 +2434,7 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
       }
     };
   },
-  computed: Object(vuex__WEBPACK_IMPORTED_MODULE_1__["mapState"])({
+  computed: _objectSpread({}, Object(vuex__WEBPACK_IMPORTED_MODULE_1__["mapState"])({
     apiStatus: function apiStatus(state) {
       return state.auth.apiStatus;
     },
@@ -2440,7 +2444,7 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
     registerErrors: function registerErrors(state) {
       return state.auth.registerErrorMessages;
     }
-  }),
+  })),
   methods: {
     login: function () {
       var _login = _asyncToGenerator(
@@ -4913,7 +4917,7 @@ var render = function() {
             }
           }
         },
-        [_vm._v("\n            Login\n        ")]
+        [_vm._v("Login\n        ")]
       ),
       _vm._v(" "),
       _c(
@@ -4927,7 +4931,7 @@ var render = function() {
             }
           }
         },
-        [_vm._v("\n            Register\n        ")]
+        [_vm._v("Register\n        ")]
       )
     ]),
     _vm._v(" "),
@@ -5227,7 +5231,7 @@ var staticRenderFns = [
       _c(
         "button",
         { staticClass: "button button--inverse", attrs: { type: "submit" } },
-        [_vm._v("register")]
+        [_vm._v("Register")]
       )
     ])
   }
@@ -5316,11 +5320,11 @@ var render = function() {
               ? _c(
                   "ul",
                   { staticClass: "photo-detail__comments" },
-                  _vm._l(_vm.photo.comments, function(comment) {
+                  _vm._l(_vm.photo.comments, function(comment, i) {
                     return _c(
                       "li",
                       {
-                        key: comment.content,
+                        key: i + "-" + comment.content,
                         staticClass: "photo-detail__commentItem"
                       },
                       [
@@ -22181,9 +22185,9 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var vue__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(vue__WEBPACK_IMPORTED_MODULE_0__);
 /* harmony import */ var vue_router__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! vue-router */ "./node_modules/vue-router/dist/vue-router.esm.js");
 /* harmony import */ var _pages_PhotoList_vue__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./pages/PhotoList.vue */ "./resources/assets/js/pages/PhotoList.vue");
-/* harmony import */ var _pages_Login_vue__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./pages/Login.vue */ "./resources/assets/js/pages/Login.vue");
-/* harmony import */ var _pages_errors_System_vue__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./pages/errors/System.vue */ "./resources/assets/js/pages/errors/System.vue");
-/* harmony import */ var _pages_PhotoDetail_vue__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ./pages/PhotoDetail.vue */ "./resources/assets/js/pages/PhotoDetail.vue");
+/* harmony import */ var _pages_PhotoDetail_vue__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./pages/PhotoDetail.vue */ "./resources/assets/js/pages/PhotoDetail.vue");
+/* harmony import */ var _pages_Login_vue__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./pages/Login.vue */ "./resources/assets/js/pages/Login.vue");
+/* harmony import */ var _pages_errors_System_vue__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ./pages/errors/System.vue */ "./resources/assets/js/pages/errors/System.vue");
 /* harmony import */ var _pages_errors_NotFound_vue__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ./pages/errors/NotFound.vue */ "./resources/assets/js/pages/errors/NotFound.vue");
 /* harmony import */ var _store__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ./store */ "./resources/assets/js/store/index.js");
 
@@ -22211,11 +22215,11 @@ var routes = [{
   }
 }, {
   path: '/photos/:id',
-  component: _pages_PhotoDetail_vue__WEBPACK_IMPORTED_MODULE_5__["default"],
+  component: _pages_PhotoDetail_vue__WEBPACK_IMPORTED_MODULE_3__["default"],
   props: true
 }, {
   path: '/login',
-  component: _pages_Login_vue__WEBPACK_IMPORTED_MODULE_3__["default"],
+  component: _pages_Login_vue__WEBPACK_IMPORTED_MODULE_4__["default"],
   beforeEnter: function beforeEnter(to, from, next) {
     if (_store__WEBPACK_IMPORTED_MODULE_7__["default"].getters['auth/check']) {
       next('/');
@@ -22225,7 +22229,7 @@ var routes = [{
   }
 }, {
   path: '/500',
-  component: _pages_errors_System_vue__WEBPACK_IMPORTED_MODULE_4__["default"]
+  component: _pages_errors_System_vue__WEBPACK_IMPORTED_MODULE_5__["default"]
 }, {
   path: '*',
   component: _pages_errors_NotFound_vue__WEBPACK_IMPORTED_MODULE_6__["default"]

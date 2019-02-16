@@ -4,16 +4,16 @@
         <ul class="tab">
             <li class = "tab__item"
                 :class="{'tab__item--active' : tab === 1 }" 
-                @click = "tab = 1">
-                Login
+                @click = "tab = 1"
+            >Login
             </li>
             <li class = "tab__item"
                 :class="{'tab__item--active' : tab === 2 }"
-                @click = "tab = 2">
-                Register
+                @click = "tab = 2"
+            >Register
             </li>
         </ul>
-        <div class="panel" v-show = "tab === 1">
+        <div class="panel" v-show ="tab === 1">
             <form class="form" @submit.prevent="login">
                 <div v-if="loginErrors" class="errors">
                     <ul v-if="loginErrors.email">
@@ -54,7 +54,7 @@
             <label for="password-confirmation">Password (confirm)</label>
             <input type="password" class="form__item" id="password-confirmation" v-model="registerForm.password_confirmation">
             <div class="form__button">
-            <button type="submit" class="button button--inverse">register</button>
+                <button type="submit" class="button button--inverse">Register</button>
             </div>
         </form>
         </div>
@@ -67,24 +67,26 @@
     export default {
     data () {
         return {
-        tab: 1,
-        loginForm: {
-            email: '',
-            password: ''
-        },
-        registerForm: {
-            name: '',
-            email: '',
-            password: '',
-            password_confirmation: ''
-        }
+            tab: 1,
+            loginForm: {
+                email: '',
+                password: ''
+            },
+            registerForm: {
+                name: '',
+                email: '',
+                password: '',
+                password_confirmation: ''
+            }
         }
     },
-    computed: mapState({
+    computed: {
+        ...mapState({
             apiStatus: state => state.auth.apiStatus,
             loginErrors: state => state.auth.loginErrorMessages,
             registerErrors: state => state.auth.registerErrorMessages
-        }),
+        })
+    },
     methods: {
         async login () {
             // authストアのresigterアクションを呼び出す
