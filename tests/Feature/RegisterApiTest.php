@@ -10,7 +10,7 @@ use Illuminate\Foundation\Testing\RefreshDatabase;
 class ResisterApiTest extends TestCase
 {
     use RefreshDatabase;
-    
+
     /**
      * @test
      */
@@ -28,7 +28,8 @@ class ResisterApiTest extends TestCase
         $user = User::first();
         $this->assertEquals($data['name'], $user->name);
 
-        $response->assertStatus(200)
-                 ->assertJson(['name' => $user->name]);
+        $response
+            ->assertStatus(200)
+            ->assertJson(['name' => $user->name]);
     }
 }
