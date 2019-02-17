@@ -8,7 +8,7 @@
       class="photo-detail__pane photo-detail__image"
       @click="fullWidth = ! fullWidth"
     >
-      <img :src="photo.filename" alt="">
+      <img :src="photo.url" alt="">
       <figcaption>Posted by {{ photo.user.name }}</figcaption>
     </figure>
     <div class="photo-detail__pane">

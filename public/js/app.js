@@ -4698,10 +4698,7 @@ var render = function() {
       _c("figure", { staticClass: "photo__wrapper" }, [
         _c("img", {
           staticClass: "photo__image photo__image--portrait",
-          attrs: {
-            src: _vm.item.filename,
-            alt: "Photo by " + _vm.item.user.name
-          }
+          attrs: { src: _vm.item.url, alt: "Photo by " + _vm.item.user.name }
         })
       ]),
       _vm._v(" "),
@@ -5276,7 +5273,7 @@ var render = function() {
               }
             },
             [
-              _c("img", { attrs: { src: _vm.photo.filename, alt: "" } }),
+              _c("img", { attrs: { src: _vm.photo.url, alt: "" } }),
               _vm._v(" "),
               _c("figcaption", [
                 _vm._v("Posted by " + _vm._s(_vm.photo.user.name))

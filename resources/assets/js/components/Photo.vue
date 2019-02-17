@@ -3,7 +3,7 @@
         <figure class="photo__wrapper">
             <img 
                 class="photo__image photo__image--portrait"
-                :src="item.filename"
+                :src="item.url"
                 :alt="`Photo by ${item.user.name}`"
             >
         </figure>

@@ -13,17 +13,19 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
 
+use Illuminate\Support\Facades\Log;
+
 
 class PhotoController extends Controller
 {
     public function __construct()
     {
         //認証が必要
-        $this->middleware('auth')->except(['index', 'show']);
+        $this->middleware('auth')->except(['index', 'show', 'download']);
     }
 
     //写真投稿
-    public function create(StorePhoto $request)
+    public function upload(StorePhoto $request)
     {
        
         $photo = new Photo();
@@ -33,8 +35,7 @@ class PhotoController extends Controller
         $path = Storage::disk('s3')->putFile('photo', $request->photo, 'public');
 
         //アップロード先のファイルパスを取得
-        $url = Storage::disk('s3')->url($path);
-        $photo->filename = $url;
+        $photo->filename = $path;
 
         //データベースエラー時にファイル削除を行うためトランザクションを利用
         DB:: beginTransaction();
@@ -102,16 +103,17 @@ class PhotoController extends Controller
      */
     public function download(Photo $photo)
     {
+        Log::Debug(__CLASS__.':'.__FUNCTION__);
         // 写真の存在チェック
-        if(! Storage::cloud()->exists($photo->filename)){
-            abort(404);
-        }
+        // if(! Storage::cloud()->exists($photo->filename)){
+        //     abort(404);
+        // }
 
         $headers = [
             'Content-Type' => 'application/octet-stream',
             'Content-Disposition' => 'attachment; filename="' . $photo->filename . '"',
         ];
-
+        
         return response(Storage::cloud()->get($photo->filename), 200, $headers);
     }
 
