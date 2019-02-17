@@ -2,10 +2,9 @@
 
 use Faker\Generator as Faker;
 
-$factory->define(Model::class, function (Faker $faker) {
+$factory->define(App\Photo::class, function (Faker $faker) {
     return [
-        'id' => str_random(12),
-        'user_id' => function () {
+        'user_id' => function(){
             return factory(App\User::class)->create()->id;
         },
         'filename' => str_random(12) . '.jpg',

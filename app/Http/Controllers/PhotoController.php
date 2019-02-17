@@ -35,7 +35,19 @@ class PhotoController extends Controller
         //アップロード先のファイルパスを取得
         $url = Storage::disk('s3')->url($path);
         $photo->filename = $url;
-        Auth::user()->photos()->save($photo);
+
+        //データベースエラー時にファイル削除を行うためトランザクションを利用
+        DB:: beginTransaction();
+
+        try{
+            Auth::user()->photos()->save($photo);
+            DB::commit();
+        } catch (\Exception $exception){
+            DB::rollback();
+            //DBとの不整合を避けるためアップロードしたファイルを削除
+            Storage::cloud()->delete($photo->filename);
+            throw $exception;
+        }
         
         // リソースの新規作成なので
         // レスポンスコードは201(CREATED)を返却する

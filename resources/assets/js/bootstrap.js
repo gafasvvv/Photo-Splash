@@ -35,8 +35,8 @@ window.axios.interceptors.request.use(config => {
 
 //レスポンスを受けた後の処理を上書き
 window.axios.interceptors.response.use(
-  response => response,
-  error => error.response || error
+  response => response,//第一引数が成功時の処理
+  error => error.response || error//第二引数は失敗時の処理
 )
 
 /**

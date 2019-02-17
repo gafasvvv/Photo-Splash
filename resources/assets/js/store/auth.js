@@ -49,19 +49,23 @@ const actions = {
 
     //ログイン
     async login (context, data) {
-        context.commit('setApiStatus', null)//通信ステータスの更新　最初はnull
+        //通信ステータスの更新　最初はnull
+        context.commit('setApiStatus', null)
         const response = await axios.post('/api/login', data)
 
         if(response.status === OK){
-            context.commit('setApiStatus', true)//通信ステータスの更新　成功したらtrue
+            //通信ステータスの更新　成功したらtrue
+            context.commit('setApiStatus', true)
             context.commit('setUser', response.data)
             return false
         }
-        context.commit('setApiStatus', false)//通信ステータスの更新　失敗したらfalse
+        //通信ステータスの更新　失敗したらfalse
+        context.commit('setApiStatus', false)
         if(response.status === UNPROCESSABLE_ENTITY){
             context.commit('setLoginErrorMessages', response.data.errors)
         } else {
-            context.commit('error/setCode', response.status, { root: true })//別モジュールのミューテーションを呼び出す
+            //別モジュールのミューテーションを呼び出す
+            context.commit('error/setCode', response.status, { root: true })
         }
       },
 

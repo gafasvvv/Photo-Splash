@@ -21361,9 +21361,11 @@ window.axios.interceptors.request.use(function (config) {
 
 window.axios.interceptors.response.use(function (response) {
   return response;
-}, function (error) {
+}, //第一引数が成功時の処理
+function (error) {
   return error.response || error;
-});
+} //第二引数は失敗時の処理
+);
 /**
  * Next we will register the CSRF Token as a common header with Axios so that
  * all outgoing HTTP requests automatically have it attached. This is just
@@ -22361,8 +22363,8 @@ var actions = {
         while (1) {
           switch (_context2.prev = _context2.next) {
             case 0:
-              context.commit('setApiStatus', null); //通信ステータスの更新　最初はnull
-
+              //通信ステータスの更新　最初はnull
+              context.commit('setApiStatus', null);
               _context2.next = 3;
               return axios.post('/api/login', data);
 
@@ -22374,20 +22376,22 @@ var actions = {
                 break;
               }
 
-              context.commit('setApiStatus', true); //通信ステータスの更新　成功したらtrue
-
+              //通信ステータスの更新　成功したらtrue
+              context.commit('setApiStatus', true);
               context.commit('setUser', response.data);
               return _context2.abrupt("return", false);
 
             case 8:
-              context.commit('setApiStatus', false); //通信ステータスの更新　失敗したらfalse
+              //通信ステータスの更新　失敗したらfalse
+              context.commit('setApiStatus', false);
 
               if (response.status === _util__WEBPACK_IMPORTED_MODULE_1__["UNPROCESSABLE_ENTITY"]) {
                 context.commit('setLoginErrorMessages', response.data.errors);
               } else {
+                //別モジュールのミューテーションを呼び出す
                 context.commit('error/setCode', response.status, {
                   root: true
-                }); //別モジュールのミューテーションを呼び出す
+                });
               }
 
             case 10:
