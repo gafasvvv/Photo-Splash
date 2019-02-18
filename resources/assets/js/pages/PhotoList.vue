@@ -65,12 +65,12 @@ export default {
         },
         async like (id) {
             const response = await axios.put(`/api/photos/${id}/like`)
-
+            
             if(response.status !== OK){
                 this.$store.commit('error/setCode', response.status)
                 return false
             }
-
+            
             this.photos = this.photos.map(photo => {
                 if(photo.id === response.data.photo_id){
                     photo.likes_count += 1

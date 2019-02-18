@@ -62,6 +62,7 @@
 
 <script>
 import { OK, CREATED, UNPROCESSABLE_ENTITY } from '../util'
+
 export default {
   props: {
     id: {
@@ -132,12 +133,12 @@ export default {
     },
     async like () {
       const response = await axios.put(`/api/photos/${this.id}/like`)
-
+      
       if (response.status !== OK) {
         this.$store.commit('error/setCode', response.status)
         return false
       }
-
+      
       this.$set(this.photo, 'likes_count', this.photo.likes_count + 1)
       this.$set(this.photo, 'liked_by_user', true)
     },

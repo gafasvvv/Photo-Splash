@@ -46,6 +46,8 @@ class PhotoListApiTest extends TestCase
             //レスポンスJsonのdata項目が期待値と合致すること
             ->assertJsonFragment([
                 'data' => $expected_data,
+                'liked_by_user' => false,
+                'likes_count' => 0,
             ]);
     }
 }
