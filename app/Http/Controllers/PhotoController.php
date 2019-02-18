@@ -131,7 +131,7 @@ class PhotoController extends Controller
         $photo->likes()->detach(Auth::user()->id);
         $photo->likes()->attach(Auth::user()->id);
 
-        return ["photo_id" => $id];
+        return ['photo_id' => $id];
 
     }
 
@@ -148,7 +148,7 @@ class PhotoController extends Controller
 
         $photo->likes()->detach(Auth::user()->id);
 
-        return ["photo_id" => $id];
+        return ['photo_id' => $id];
 
     }
 }

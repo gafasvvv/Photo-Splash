@@ -8,6 +8,9 @@ use Illuminate\Support\Facades\Auth;
 
 class Photo extends Model
 {
+    /** プライマリキーの型 */
+    protected $keyType = 'string';
+
     protected $fillable = ['user_id', 'filename'];
 
     /** JSONに含めるアクセサ */
