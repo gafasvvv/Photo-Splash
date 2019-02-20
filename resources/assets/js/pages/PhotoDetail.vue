@@ -27,6 +27,12 @@
       >
         <i class="icon ion-md-arrow-round-down"></i>Download
       </a>
+      <button
+        class="button button--delete"
+        title="delete photo"
+        @click="deletePhoto"
+      >Delete
+      </button>
       <h2 class="photo-detail__title">
         <i class="icon ion-md-chatboxes"></i>Comments
       </h2>
@@ -92,8 +98,15 @@ export default {
       }
       this.photo = response.data
     },
+    async deletePhoto(){
+      const response = await axios.delete(`/api/photos/${this.id}`)
+      if (response.status !== OK) {
+        this.$store.commit('error/setCode', response.status)
+        return false
+      }
+      this.photo = response.data
+    },
     async addComment () {
-
       const response = await axios.post(`/api/photos/${this.id}/comments`, {
         content: this.commentContent
       })

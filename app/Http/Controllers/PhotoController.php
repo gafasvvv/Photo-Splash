@@ -24,6 +24,41 @@ class PhotoController extends Controller
         $this->middleware('auth')->except(['index', 'show', 'download']);
     }
 
+    //写真一覧
+    public function index()
+    {
+        $photos = Photo::with(['user', 'likes'])
+            ->orderBy(Photo::CREATED_AT, 'desc')->paginate();
+
+        return $photos;
+    }
+
+    /**
+     * 写真詳細
+     * @param string $id
+     * @return Photo
+     */
+    public function show(string $id)
+    {
+        $photo = Photo::where('id', $id)
+            ->with(['user', 'comments.author', 'likes'])->first();
+
+        return $photo ?? abort(404);
+    }
+
+    //写真削除
+    public function destroy(string $id)
+    {
+        $photo = Photo::where('id', $id)
+            ->with(['user', 'comments.author', 'likes'])->first();
+
+        if(\Auth::id() === $photo->user_id){
+            $photo->delete();
+        }
+        Storage::cloud()->delete($photo->filename);
+        return $photo->name;
+    }
+
     //写真投稿
     public function upload(StorePhoto $request)
     {
@@ -53,28 +88,6 @@ class PhotoController extends Controller
         // リソースの新規作成なので
         // レスポンスコードは201(CREATED)を返却する
         return response($photo, 201);
-    }
-
-    //写真一覧
-    public function index()
-    {
-        $photos = Photo::with(['user', 'likes'])
-            ->orderBy(Photo::CREATED_AT, 'desc')->paginate();
-
-        return $photos;
-    }
-
-    /**
-     * 写真詳細
-     * @param string $id
-     * @return Photo
-     */
-    public function show(string $id)
-    {
-        $photo = Photo::where('id', $id)
-            ->with(['user', 'comments.author', 'likes'])->first();
-
-        return $photo ?? abort(404);
     }
 
     /**

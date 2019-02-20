@@ -39,14 +39,17 @@ Route::get('/reflesh-token', function(Illuminate\Http\Request $request){
     return response()->json();
 });
 
-//写真投稿
-Route::post('/photos', 'PhotoController@upload')->name('photo.create');
-
 //写真一覧
 Route::get('/photos', 'PhotoController@index')->name('photo.index');
 
 //写真詳細
 Route::get('/photos/{id}', 'PhotoController@show')->name('photo.show');
+
+//写真削除
+Route::delete('/photos/{id}', 'PhotoController@destroy')->name('photo.destroy');
+
+//写真投稿
+Route::post('/photos', 'PhotoController@upload')->name('photo.upload');
 
 //コメント
 Route::post('/photos/{photo}/comments', 'PhotoController@addComment')->name('photo.comment');

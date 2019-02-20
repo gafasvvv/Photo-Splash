@@ -2607,6 +2607,12 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
 //
 //
 //
+//
+//
+//
+//
+//
+//
 
 /* harmony default export */ __webpack_exports__["default"] = ({
   props: {
@@ -2669,8 +2675,8 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
 
       return fetchPhoto;
     }(),
-    addComment: function () {
-      var _addComment = _asyncToGenerator(
+    deletePhoto: function () {
+      var _deletePhoto = _asyncToGenerator(
       /*#__PURE__*/
       _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.mark(function _callee2() {
         var response;
@@ -2679,20 +2685,60 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
             switch (_context2.prev = _context2.next) {
               case 0:
                 _context2.next = 2;
+                return axios.delete("/api/photos/".concat(this.id));
+
+              case 2:
+                response = _context2.sent;
+
+                if (!(response.status !== _util__WEBPACK_IMPORTED_MODULE_1__["OK"])) {
+                  _context2.next = 6;
+                  break;
+                }
+
+                this.$store.commit('error/setCode', response.status);
+                return _context2.abrupt("return", false);
+
+              case 6:
+                this.photo = response.data;
+
+              case 7:
+              case "end":
+                return _context2.stop();
+            }
+          }
+        }, _callee2, this);
+      }));
+
+      function deletePhoto() {
+        return _deletePhoto.apply(this, arguments);
+      }
+
+      return deletePhoto;
+    }(),
+    addComment: function () {
+      var _addComment = _asyncToGenerator(
+      /*#__PURE__*/
+      _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.mark(function _callee3() {
+        var response;
+        return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.wrap(function _callee3$(_context3) {
+          while (1) {
+            switch (_context3.prev = _context3.next) {
+              case 0:
+                _context3.next = 2;
                 return axios.post("/api/photos/".concat(this.id, "/comments"), {
                   content: this.commentContent
                 });
 
               case 2:
-                response = _context2.sent;
+                response = _context3.sent;
 
                 if (!(response.status === _util__WEBPACK_IMPORTED_MODULE_1__["UNPROCESSABLE_ENTITY"])) {
-                  _context2.next = 6;
+                  _context3.next = 6;
                   break;
                 }
 
                 this.commentErrors = response.data.errors;
-                return _context2.abrupt("return", false);
+                return _context3.abrupt("return", false);
 
               case 6:
                 this.commentContent = ''; //エラーメッセージをクリア
@@ -2700,22 +2746,22 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
                 this.commentErrors = null; //その他のエラー
 
                 if (!(response.status !== _util__WEBPACK_IMPORTED_MODULE_1__["CREATED"])) {
-                  _context2.next = 11;
+                  _context3.next = 11;
                   break;
                 }
 
                 this.$store.commit('error/setCode', response.status);
-                return _context2.abrupt("return", false);
+                return _context3.abrupt("return", false);
 
               case 11:
                 this.$set(this.photo, 'comments', [response.data].concat(_toConsumableArray(this.photo.comments)));
 
               case 12:
               case "end":
-                return _context2.stop();
+                return _context3.stop();
             }
           }
-        }, _callee2, this);
+        }, _callee3, this);
       }));
 
       function addComment() {
@@ -2739,47 +2785,6 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
     like: function () {
       var _like = _asyncToGenerator(
       /*#__PURE__*/
-      _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.mark(function _callee3() {
-        var response;
-        return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.wrap(function _callee3$(_context3) {
-          while (1) {
-            switch (_context3.prev = _context3.next) {
-              case 0:
-                _context3.next = 2;
-                return axios.put("/api/photos/".concat(this.id, "/like"));
-
-              case 2:
-                response = _context3.sent;
-
-                if (!(response.status !== _util__WEBPACK_IMPORTED_MODULE_1__["OK"])) {
-                  _context3.next = 6;
-                  break;
-                }
-
-                this.$store.commit('error/setCode', response.status);
-                return _context3.abrupt("return", false);
-
-              case 6:
-                this.$set(this.photo, 'likes_count', this.photo.likes_count + 1);
-                this.$set(this.photo, 'liked_by_user', true);
-
-              case 8:
-              case "end":
-                return _context3.stop();
-            }
-          }
-        }, _callee3, this);
-      }));
-
-      function like() {
-        return _like.apply(this, arguments);
-      }
-
-      return like;
-    }(),
-    unlike: function () {
-      var _unlike = _asyncToGenerator(
-      /*#__PURE__*/
       _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.mark(function _callee4() {
         var response;
         return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.wrap(function _callee4$(_context4) {
@@ -2787,7 +2792,7 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
             switch (_context4.prev = _context4.next) {
               case 0:
                 _context4.next = 2;
-                return axios.delete("/api/photos/".concat(this.id, "/like"));
+                return axios.put("/api/photos/".concat(this.id, "/like"));
 
               case 2:
                 response = _context4.sent;
@@ -2801,8 +2806,8 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
                 return _context4.abrupt("return", false);
 
               case 6:
-                this.$set(this.photo, 'likes_count', this.photo.likes_count - 1);
-                this.$set(this.photo, 'liked_by_user', false);
+                this.$set(this.photo, 'likes_count', this.photo.likes_count + 1);
+                this.$set(this.photo, 'liked_by_user', true);
 
               case 8:
               case "end":
@@ -2810,6 +2815,47 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
             }
           }
         }, _callee4, this);
+      }));
+
+      function like() {
+        return _like.apply(this, arguments);
+      }
+
+      return like;
+    }(),
+    unlike: function () {
+      var _unlike = _asyncToGenerator(
+      /*#__PURE__*/
+      _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.mark(function _callee5() {
+        var response;
+        return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.wrap(function _callee5$(_context5) {
+          while (1) {
+            switch (_context5.prev = _context5.next) {
+              case 0:
+                _context5.next = 2;
+                return axios.delete("/api/photos/".concat(this.id, "/like"));
+
+              case 2:
+                response = _context5.sent;
+
+                if (!(response.status !== _util__WEBPACK_IMPORTED_MODULE_1__["OK"])) {
+                  _context5.next = 6;
+                  break;
+                }
+
+                this.$store.commit('error/setCode', response.status);
+                return _context5.abrupt("return", false);
+
+              case 6:
+                this.$set(this.photo, 'likes_count', this.photo.likes_count - 1);
+                this.$set(this.photo, 'liked_by_user', false);
+
+              case 8:
+              case "end":
+                return _context5.stop();
+            }
+          }
+        }, _callee5, this);
       }));
 
       function unlike() {
@@ -2824,20 +2870,20 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
       handler: function () {
         var _handler = _asyncToGenerator(
         /*#__PURE__*/
-        _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.mark(function _callee5() {
-          return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.wrap(function _callee5$(_context5) {
+        _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.mark(function _callee6() {
+          return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.wrap(function _callee6$(_context6) {
             while (1) {
-              switch (_context5.prev = _context5.next) {
+              switch (_context6.prev = _context6.next) {
                 case 0:
-                  _context5.next = 2;
+                  _context6.next = 2;
                   return this.fetchPhoto();
 
                 case 2:
                 case "end":
-                  return _context5.stop();
+                  return _context6.stop();
               }
             }
-          }, _callee5, this);
+          }, _callee6, this);
         }));
 
         function handler() {
@@ -5309,6 +5355,16 @@ var render = function() {
                 _c("i", { staticClass: "icon ion-md-arrow-round-down" }),
                 _vm._v("Download\n    ")
               ]
+            ),
+            _vm._v(" "),
+            _c(
+              "button",
+              {
+                staticClass: "button button--delete",
+                attrs: { title: "delete photo" },
+                on: { click: _vm.deletePhoto }
+              },
+              [_vm._v("Delete\n    ")]
             ),
             _vm._v(" "),
             _vm._m(0),

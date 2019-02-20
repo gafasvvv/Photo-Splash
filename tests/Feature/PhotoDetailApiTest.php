@@ -22,6 +22,8 @@ class PhotoDetailApiTest extends TestCase
         });
         $photo = Photo::first();
 
+        $comments = $photo->comments()->get();
+        
         $response = $this->json('GET', route('photo.show', [
             'id' => $photo->id,
         ]));
@@ -35,17 +37,13 @@ class PhotoDetailApiTest extends TestCase
                 ],
                 'liked_by_user' => false,
                 'likes_count' => 0,
-                'comments' => $photo->comments
-                    ->sortByDesc('id')
-                    ->map(function ($comment){
-                        return [
-                            'author' => [
-                                'name' => $comment->author->name,
-                            ],
-                            'content' => $comment->content,
-                        ];
-                    })
-                    ->all(),
+                'comments' => [
+                    'content' => $comments->content,
+                    'author' => [
+                        'name' => $comments->user->name,
+                    ],
+                ]
+                ->all(),
             ]);
     }
 }
